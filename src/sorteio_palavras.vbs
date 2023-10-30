@@ -67,7 +67,6 @@ end sub
 
 'Menu
 sub start()
-
    ' menu com começar jogo, sair ou ver instruções
    opcao = inputbox("Escolha uma das opcoes: " + vbnewline & _ 
    "1) Comecar jogo" + vbnewline & _
@@ -180,8 +179,7 @@ sub sortear_palavra()
             call sortear_palavra
          'else
          '  msgbox("Fim de palavras no banco")
-         'End if	  
-         
+         'End if
          
       Else
          msgbox("Você errou!")

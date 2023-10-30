@@ -35,4 +35,4 @@ explorer.exe ./development/soletrando
 Pré-requisito(s): SQL Server e SQL Server Management Studio (SSMS)
 
 1. Executar script do `database/scripts/soletrando.sql`, no SSMS
-2. Onde tiver abertura de conexão pelo código, deve ser substituído o `Data Source` pelo nome/IP da máquina local
+2. Comentar connection string do SQL Server do Docker & Descomentar a connection string de banco local
