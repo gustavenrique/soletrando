@@ -5,17 +5,13 @@ Para testar a aplicação, é necessário ter um banco SQL Server com o banco e 
 script `database/scripts/soletrando.sql`. Desse modo, há duas opções para atingir isso:
 
 ### Via Docker
-Pré-requisito(s): 
-- Docker
+Pré-requisito(s): Docker
 
 1. Executar `docker compose up -d`, no terminal Linux
 
-
-Caso queira executar via Docker no Windows, mas não o tem instalado,
-duas possíveis opções são:
-- Instalar o (Docker Desktop)[https://docs.docker.com/desktop/install/windows-install/] (Mais fácil)
-
-- Instalar o (Docker Engine + WSL 2)[https://github.com/codeedu/wsl2-docker-quickstart] (Mais recomendado):
+Caso queira executar via Docker no Windows, mas não o tem instalado, duas possíveis opções são:
+- Instalar o [Docker Desktop](https://docs.docker.com/desktop/install/windows-install/) (Mais fácil)
+- Instalar o [Docker Engine + WSL 2](https://github.com/codeedu/wsl2-docker-quickstart) (Mais recomendado):
 ```bash
 # 1. Instalar WSL via PowerShell
 wsl --update
@@ -35,11 +31,8 @@ git clone https://github.com/gustavenrique/soletrando.git ./development/soletran
 explorer.exe ./development/soletrando
 ```
 
-
 ### Via SQL Server instalado local
-Pré-requisito(s): 
-- SQL Server
-- SQL Server Management Studio (SSMS)
+Pré-requisito(s): SQL Server e SQL Server Management Studio (SSMS)
 
 1. Executar script do `database/scripts/soletrando.sql`, no SSMS
 2. Onde tiver abertura de conexão pelo código, deve ser substituído o `Data Source` pelo nome/IP da máquina local
