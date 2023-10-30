@@ -1,4 +1,4 @@
-dim db,rs,sql,resultado,qtde_palavra,resp,n,id,x
+dim db, queryResult, query, resultado, qtde_palavra, resp, n, id
 dim audio, compara, status, aux, opcao, level, right
 
 call conecta_banco
@@ -6,9 +6,8 @@ call conecta_banco
 sub conecta_banco()
    set db = CreateObject("ADODB.connection")
    
-   db.Open("Provider=SQLOLEDB;Data Source=localhost;Initial Catalog=soletrando;trusted_connection=yes;")
-   
-   msgbox("Conexão OK"),vbinformation+vbOKOnly,"AVISO"
+   ' SEM DOCKER: db.Open("Provider=SQLOLEDB;Data Source=SEU_HOSTNAME;Initial Catalog=soletrando;trusted_connection=yes;")
+   db.Open("Provider=SQLOLEDB;Data Source=127.0.0.1;Initial Catalog=soletrando; User ID=sa; Password=sqlserver2023!") ' COM DOCKER
    
    set audio = createobject("SAPI.SPVOICE")
    
@@ -21,48 +20,17 @@ end sub
 
 'Aqui será inserido o nome para o placar
 sub cadastrar_nome()
-   palavra=inputbox("Digite o seu nome","SOLETRANDO")
+   Dim nome: nome = InputBox("Digite o seu nome","SOLETRANDO")
    
-   sql="select * from ranking where jogador_nome='"& palavra &"'"
+   query = "SELECT TOP 1 nome FROM jogador WHERE nome='"& nome &"'"
    
-   set rs=db.execute(sql)
+   set queryResult = db.execute(query)
   
-      sql="insert into ranking (jogador_nome) values ('"& palavra &"')"
-      
-      rs=db.execute(ucase(sql))
-      
-      resp=msgbox("Jogador cadastrado com sucesso!")
-end sub
-
-' GUSTAVO não conseguimos corrigir a sintaxe do sub verificar
-sub verificar()
-   sql = "select acertos from ranking as right"
-
-   If (right == 5 AND level == "a") Then
-      sql="update ranking set grana=5000"
-      sql="update ranking set nivel=b"
-      sql="update ranking set acertos=0"
-
-      set resultado = db.execute(sql)
-   ElseIf ((right == 1) And (level == "b")) Then
-      sql="update ranking set grana=10000"
-      sql="update ranking set grana=10000"
-
-   ElseIf ((right == 5) And (level == "b")) Then        
-      sql="update ranking set nivel=c"
-      sql="update ranking set acertos=0"
+   query = "INSERT INTO jogador (nome) VALUES ('"& nome &"')"
    
-   ElseIf ((right == 1) And (level == "c")) Then 
-      sql="update ranking set grana=100000"
+   queryResult = db.execute(ucase(query))
    
-   ElseIf ((right == 5) And (level == "c")) Then 
-      sql="update ranking set grana=1000000"
-      sql="update ranking set nivel=d"
-      sql="update ranking set acertos=0"
-
-   ElseIf ((right == 1) And (level == "d")) Then 
-      sql="update ranking set nivel=0"
-      sql="update ranking set acertos=0"
+   MsgBox("Jogador cadastrado com sucesso!")
 end sub
 
 'Menu
@@ -79,26 +47,27 @@ sub start()
       case 2
          call ver_instrucoes
       case else
-         msgbox("Sair"),vbinformation+vbOKOnly,"Saindo..."
+         MsgBox("Sair"),vbinformation+vbOKOnly,"Saindo..."
    end select
 end sub
 
 ' GUSTAVO aqui o problema também está na sintaxe
 sub pular()
-   x=1
-   Do While x=<3
-      'Chance de pular a palavra
-         resp=msgbox("Deseja pular a palavra?",vbquestion+vbyesno,"PULAR")
-         if resp=vbyes Then
-            sql="update palavra set ja_foi='S'"
-            resultado=db.execute(sql)
-            x=x+1
-            call sortear_palavra
-         else
-            Next
-         end if  
-   Loop
+   Dim count: count = 1
 
+   Do While count <= 3
+      'Chance de pular a palavra
+      resp = MsgBox("Deseja pular a palavra?",vbquestion+vbyesno,"PULAR")
+
+      if resp=vbyes Then
+         query="update palavra set ja_foi='S'"
+         resultado=db.execute(query)
+         count = count + 1
+         call sortear_palavra
+      else
+         Next
+      end if  
+   Loop
 end sub
 
 'Manual de Regras
@@ -108,16 +77,16 @@ sub ver_instrucoes()
       "Nivel C: 5 Palavras sorteadas de 10 possiveis " + vbnewline & _ 
       "Nivel D: 1 Palavra sorteada de 10 possiveis "
 
-   msgbox(instrucoes),vbinformation+vbOKOnly,"Instrucoes"
+   MsgBox(instrucoes, vbInformation + vbOKOnly,"Instrucoes")
 
    call start
 end sub
 
 'Aqui está o xabu!
 sub sortear_palavra()
-   sql = "select count(*) as qtde from palavra"
+   query = "select count(*) as qtde from palavra"
 
-   set resultado = db.execute(sql)
+   set resultado = db.execute(query)
    
    qtde_palavra = resultado.fields("qtde")
    
@@ -125,9 +94,9 @@ sub sortear_palavra()
    
    n = int(rnd * qtde_palavra) + 1
    
-   sql = "select * from palavra where id=" & n &""
+   query = "select * from palavra where id=" & n &""
    
-   set resultado = db.execute(sql)
+   set resultado = db.execute(query)
    
    palavra = resultado.fields(1).value
    
@@ -143,52 +112,52 @@ sub sortear_palavra()
 
       if compara = palavra Then 
       
-         sql = "update palavra set ja_foi='S' where id="& n &"" 
+         query = "update palavra set ja_foi='S' where id="& n &"" 
       
-         msgbox("Você acertou!!!")
+         MsgBox("Você acertou!!!")
 
-         set resultado = db.execute(sql)
+         set resultado = db.execute(query)
  
-         sql = "select nivel from ranking as level"
+         query = "select nivel from ranking as level"
 
       Select Case level
       Case a
          call verificar
-         sql="update ranking set grana+=1000"
+         query="update ranking set grana+=1000"
 
       Case b
          call verificar
-         sql="update ranking set grana+=10000"
+         query="update ranking set grana+=10000"
 
       Case c
          call verificar
-         sql="update ranking set grana+=100000"
+         query="update ranking set grana+=100000"
 
       case d
          call verificar
          Debug.WriteLine("VOCÊ GANHOU!")
-         sql="update ranking set grana=1000000"
+         query="update ranking set grana=1000000"
 
       End Select         
          
-         'sql="select count(*) as qtde_palavras from palavra where ja_foi='N'"
-         'resultado=db.execute(sql)
+         'query="select count(*) as qtde_palavras from palavra where ja_foi='N'"
+         'resultado=db.execute(query)
          'aux=resultado.fields("qtde_palavras")
-         'msgbox(aux)	  
+         'MsgBox(aux)	  
       'if aux <> 0 then
             call sortear_palavra
          'else
-         '  msgbox("Fim de palavras no banco")
+         '  MsgBox("Fim de palavras no banco")
          'End if
          
       Else
-         msgbox("Você errou!")
+         MsgBox("Você errou!")
          
-         resp=msgbox("Deseja jogar novamente?",vbquestion+vbyesno,"ATENÇÃO")
+         resp=MsgBox("Deseja jogar novamente?",vbquestion+vbyesno,"ATENÇÃO")
          if resp=vbyes Then
-            sql="update palavra set ja_foi='N'"
+            query="update palavra set ja_foi='N'"
             
-            resultado=db.execute(sql)
+            resultado=db.execute(query)
             
             call sortear_palavra
          else
@@ -201,3 +170,30 @@ sub sortear_palavra()
 
 end sub
 
+sub verificar()
+   ' TODO: Apenas incrementar grana do jogador se baseando no nivel da palavra acertada
+   query = "select acertos from ranking as right" ' SELECT COUNT(*) FROM tentativa WHERE jogador_id = <JOGADOR_ID> AND acertou = 1
+
+   right = db.execute(query)
+
+   If (right == 5 AND level == "a") Then
+      query="update ranking set grana = 5000, nivel = 'b', acertos = 0"
+
+   elseif ((right == 1) And (level == "b")) Then
+      query="update ranking set grana = 10000"
+
+   elseif ((right == 5) And (level == "b")) Then        
+      query="update ranking set nivel = 'c', acertos = 0"
+   
+   elseif ((right == 1) And (level == "c")) Then 
+      query="update ranking set grana = 100000"
+   
+   elseif ((right == 5) And (level == "c")) Then 
+      query="update ranking set grana = 1000000, nivel = 'd', acertos=0"
+   
+   elseif ((right == 1) And (level == "d")) Then 
+      query="update ranking set nivel=0, acertos=0"
+   end if
+
+   set resultado = db.execute(query)
+end sub
