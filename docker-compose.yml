@@ -1,0 +1,23 @@
+version: '3.8'
+
+services:
+  db-soletrando:
+    container_name: db-soletrando
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: Y
+      MSSQL_SA_PASSWORD: sqlserver2023!
+    volumes:
+      - ./database/data:/var/opt/mssql/data
+    ports:
+      - 1433:1433
+
+  mssql-tools:
+    image: mcr.microsoft.com/mssql-tools
+    container_name: sqlserver-cmd
+    command: bash ./tmp/migrate.sh
+    volumes:
+      - ./database/scripts/soletrando.sql:/tmp/soletrando.sql
+      - ./database/migrate.sh:/tmp/migrate.sh
+    depends_on: 
+      - db-soletrando
