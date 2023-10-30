@@ -6,7 +6,7 @@ call conecta_banco
 sub conecta_banco()
    set db = CreateObject("ADODB.connection")
    
-   db.Open("Provider=SQLOLEDB;Data Source=M2-MONPC;Initial Catalog=soletrando;trusted_connection=yes;")
+   db.Open("Provider=SQLOLEDB;Data Source=localhost;Initial Catalog=soletrando;trusted_connection=yes;")
    
    msgbox("Conexão OK"),vbinformation+vbOKOnly,"AVISO"
    
@@ -36,34 +36,33 @@ end sub
 
 ' GUSTAVO não conseguimos corrigir a sintaxe do sub verificar
 sub verificar()
-
    sql = "select acertos from ranking as right"
 
-      If (right == 5 AND level == "a") Then
-         sql="update ranking set grana=5000"
-         sql="update ranking set nivel=b"
-         sql="update ranking set acertos=0"
+   If (right == 5 AND level == "a") Then
+      sql="update ranking set grana=5000"
+      sql="update ranking set nivel=b"
+      sql="update ranking set acertos=0"
 
-         set resultado = db.execute(sql)
-      ElseIf ((right == 1) And (level == "b")) Then
-         sql="update ranking set grana=10000"
-         sql="update ranking set grana=10000"
+      set resultado = db.execute(sql)
+   ElseIf ((right == 1) And (level == "b")) Then
+      sql="update ranking set grana=10000"
+      sql="update ranking set grana=10000"
 
-      ElseIf ((right == 5) And (level == "b")) Then        
-         sql="update ranking set nivel=c"
-         sql="update ranking set acertos=0"
-      
-      ElseIf ((right == 1) And (level == "c")) Then 
-         sql="update ranking set grana=100000"
-      
-      ElseIf ((right == 5) And (level == "c")) Then 
-         sql="update ranking set grana=1000000"
-         sql="update ranking set nivel=d"
-         sql="update ranking set acertos=0"
+   ElseIf ((right == 5) And (level == "b")) Then        
+      sql="update ranking set nivel=c"
+      sql="update ranking set acertos=0"
+   
+   ElseIf ((right == 1) And (level == "c")) Then 
+      sql="update ranking set grana=100000"
+   
+   ElseIf ((right == 5) And (level == "c")) Then 
+      sql="update ranking set grana=1000000"
+      sql="update ranking set nivel=d"
+      sql="update ranking set acertos=0"
 
-      ElseIf ((right == 1) And (level == "d")) Then 
-         sql="update ranking set nivel=0"
-         sql="update ranking set acertos=0"
+   ElseIf ((right == 1) And (level == "d")) Then 
+      sql="update ranking set nivel=0"
+      sql="update ranking set acertos=0"
 end sub
 
 'Menu

@@ -10,11 +10,10 @@ IF NOT EXISTS (SELECT TOP 1 1 FROM sys.tables WHERE name = 'palavra')
 		id INT IDENTITY(1, 1) NOT NULL,
 		palavra VARCHAR(50) NOT NULL,
 		nivel CHAR(1) NOT NULL,
-		ja_foi BIT NOT NULL DEFAULT 0,
 		CHECK (nivel IN ('a', 'b', 'c', 'd')),
 		CONSTRAINT PK_Palavra PRIMARY KEY (id)
 	)
-	
+
 IF NOT EXISTS (SELECT TOP 1 1 FROM sys.tables WHERE name = 'jogador')
 	CREATE TABLE jogador (
 		id INT IDENTITY(1, 1) NOT NULL,
