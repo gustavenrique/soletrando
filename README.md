@@ -1,7 +1,7 @@
 # Soletrando
 
 ## Como testar
-Para testar a aplicação, é necessário ter um banco SQL Server com o banco e tabelas do 
+Para testar a aplicação, é necessário ter um servidor SQL Server com o banco e tabelas do 
 script `database/scripts/soletrando.sql`. Desse modo, há duas opções para atingir isso:
 
 ### Via Docker
