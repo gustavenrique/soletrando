@@ -16,6 +16,10 @@ services:
     image: mcr.microsoft.com/mssql-tools
     container_name: sqlserver-cmd
     command: bash ./tmp/migrate.sh
+    environment:
+      MSSQL_USER: sa
+      MSSQL_PASSWORD: sqlserver2023!
+      MSSQL_SERVER: db-soletrando
     volumes:
       - ./database/scripts/soletrando.sql:/tmp/soletrando.sql
       - ./database/migrate.sh:/tmp/migrate.sh

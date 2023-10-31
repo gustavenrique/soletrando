@@ -1,11 +1,11 @@
 # !/bin/bash
 
 # waiting for the database startup
-sleep 20
+sleep 25
 
 /opt/mssql-tools/bin/sqlcmd \
-    -S db-soletrando \
-    -U sa -P sqlserver2023! \
+    -S ${MSSQL_SERVER} \
+    -U ${MSSQL_USER} -P ${MSSQL_PASSWORD} \
     -d master \
     -l 20 \
     -Q "
@@ -16,8 +16,8 @@ sleep 20
     "
 
 /opt/mssql-tools/bin/sqlcmd \
-    -S db-soletrando \
-    -U sa -P sqlserver2023! \
+    -S ${MSSQL_SERVER} \
+    -U ${MSSQL_USER} -P ${MSSQL_PASSWORD} \
     -d soletrando \
     -l 20 \
     -i /tmp/soletrando.sql
