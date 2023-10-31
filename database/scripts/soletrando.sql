@@ -1,5 +1,5 @@
--- IF NOT EXISTS(SELECT TOP 1 1 FROM sys.databases WHERE name = 'soletrando')
--- 	CREATE DATABASE soletrando
+IF NOT EXISTS(SELECT TOP 1 1 FROM sys.databases WHERE name = 'soletrando')
+	CREATE DATABASE soletrando
 
 -- USE soletrando
 
